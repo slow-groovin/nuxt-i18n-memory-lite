@@ -78,14 +78,14 @@ export interface I18nRuntimeConfig {
    * 当无法检测到其他语言时使用此值
    * @default 'en'
    */
-  defaultLocale: string
+  defaultLocale: string | undefined
 
   /**
    * 支持的语言列表
    * 定义应用支持的所有语言代码
    * @default ['en']
    */
-  locales: string[]
+  locales: string[] | undefined
 
   /**
    * URL 路由前缀策略
@@ -94,19 +94,19 @@ export interface I18nRuntimeConfig {
    * - 'no_prefix': 不加任何语言前缀
    * @default 'prefix'
    */
-  strategy: 'prefix' | 'prefix_except_default' | 'no_prefix'
+  strategy: 'prefix' | 'prefix_except_default' | 'no_prefix' | undefined
 
   /**
    * 浏览器语言检测配置
    * 用于自动检测用户的浏览器首选语言
    */
-  detectBrowserLanguage: DetectBrowserLanguageOptions
+  detectBrowserLanguage: DetectBrowserLanguageOptions | undefined
 
   /**
    * 翻译消息对象
    * 按语言代码组织的嵌套翻译键值对
    */
-  messages: Record<string, I18nMessages>
+  messages: Record<string, I18nMessages> | undefined
 }
 
 // ============================================

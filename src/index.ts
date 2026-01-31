@@ -33,6 +33,10 @@ export { default as NuxtI18nCodeModule } from './module'
 // 2. 导出类型定义
 // ============================================
 
+// 导入 types/index.ts 以加载 module augmentation (扩展 @nuxt/schema 类型)
+// @ts-ignore: 我们只关心副作用 (module augmentation 的加载)
+import './types'
+
 export type {
   // 核心类型
   ModuleOptions,

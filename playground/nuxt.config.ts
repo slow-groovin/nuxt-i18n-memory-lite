@@ -1,8 +1,8 @@
 export default defineNuxtConfig({
-  modules: ['nuxt-i18n-code'],
+  modules: ['nuxt-i18n-within-code'],
   devtools: { enabled: true },
   compatibilityDate: 'latest',
-  i18nCode:{
+  i18nWithinCode:{
     defaultLocale: 'ja',
     locales: ['en','ja','zh'],
     strategy: 'prefix',

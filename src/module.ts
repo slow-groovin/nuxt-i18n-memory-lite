@@ -56,7 +56,7 @@ import type { NuxtPage } from 'nuxt/schema'
 // 2. 导入共享类型和工具
 // ============================================
 
-import type { ModuleOptions } from './types'
+import type { ModuleOptions, I18nRuntimeConfig } from './types'
 import { deepMerge, defaultI18nConfig } from './utils'
 
 // 重导出类型，保持向后兼容
@@ -71,8 +71,8 @@ export type { ModuleOptions, I18nRuntimeConfig, I18nMessages, DetectBrowserLangu
  */
 export default defineNuxtModule<ModuleOptions>({
   meta: {
-    name: 'nuxt-i18n-code',
-    configKey: 'i18nCode',
+    name: 'nuxt-i18n-within-code',
+    configKey: 'i18nWithinCode',
     compatibility: {
       nuxt: '>=3.0.0',
     },
@@ -117,18 +117,22 @@ export default defineNuxtModule<ModuleOptions>({
     }
 
     // 构建运行时配置对象
-    const runtimeConfig = {
-      defaultLocale: _options.defaultLocale,
-      locales: _options.locales,
-      strategy: _options.strategy,
-      detectBrowserLanguage: _options.detectBrowserLanguage,
+    const runtimeConfig: I18nRuntimeConfig = {
+      defaultLocale: _options.defaultLocale ?? 'en',
+      locales: _options.locales ?? ['en'],
+      strategy: _options.strategy ?? 'prefix',
+      detectBrowserLanguage: _options.detectBrowserLanguage ?? {
+        useCookie: false,
+        cookieKey: 'i18n_redirected',
+        redirectOn: 'root',
+      },
       messages: mergedMessages,
     }
 
     // 将运行时配置注入到 Nuxt 的 public 运行时配置中
     nuxt.options.runtimeConfig = nuxt.options.runtimeConfig || { public: {} }
     nuxt.options.runtimeConfig.public = nuxt.options.runtimeConfig.public || {}
-    nuxt.options.runtimeConfig.public.i18n = runtimeConfig
+    nuxt.options.runtimeConfig.public.i18n = runtimeConfig as any
 
     // 注册运行时插件
     addPlugin({
