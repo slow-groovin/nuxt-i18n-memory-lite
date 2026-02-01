@@ -56,11 +56,13 @@ import type { NuxtPage } from 'nuxt/schema'
 // 2. 导入共享类型和工具
 // ============================================
 
-import type { ModuleOptions, I18nRuntimeConfig } from './types'
-import { deepMerge, defaultI18nConfig } from './utils'
+
+import type { I18nRuntimeConfig, ModuleOptions } from './types'
+
+
 
 // 重导出类型，保持向后兼容
-export type { ModuleOptions, I18nRuntimeConfig, I18nMessages, DetectBrowserLanguageOptions } from './types'
+// export type { ModuleOptions, I18nRuntimeConfig, I18nMessages, DetectBrowserLanguageOptions } from './types'
 
 // ============================================
 // 3. 模块定义与导出
@@ -80,7 +82,7 @@ export default defineNuxtModule<ModuleOptions>({
 
   defaults: {
     defaultLocale: 'en',
-    locales: ['en'],
+    locales: [],
     strategy: 'prefix',
     detectBrowserLanguage: {
       useCookie: false,
@@ -91,12 +93,13 @@ export default defineNuxtModule<ModuleOptions>({
 
   async setup(_options, nuxt) {
     const { resolve } = createResolver(import.meta.url)
-
+    console.log('_options',_options)
     // 初始化翻译消息对象
     let messages = _options.messages || {}
 
     // 加载外部配置文件（如果指定了 configFile）
     if (_options.configFile) {
+      console.log('resolve _options.configFile',_options.configFile)
       const configPath = resolve(nuxt.options.rootDir, _options.configFile)
 
       try {
@@ -113,21 +116,18 @@ export default defineNuxtModule<ModuleOptions>({
     const mergedMessages: Record<string, any> = {}
     const resolvedMessages = typeof messages === 'function' ? messages() : messages
     for (const locale of _options.locales || []) {
-      mergedMessages[locale] = deepMerge({}, resolvedMessages[locale] || {})
+      mergedMessages[locale] = defu({}, resolvedMessages[locale] || {})
     }
+
+    
 
     // 构建运行时配置对象
     const runtimeConfig: I18nRuntimeConfig = {
-      defaultLocale: _options.defaultLocale ?? 'en',
-      locales: _options.locales ?? ['en'],
-      strategy: _options.strategy ?? 'prefix',
-      detectBrowserLanguage: _options.detectBrowserLanguage ?? {
-        useCookie: false,
-        cookieKey: 'i18n_redirected',
-        redirectOn: 'root',
-      },
+      ..._options,
       messages: mergedMessages,
     }
+
+    console.log('runtimeConfig',runtimeConfig)
 
     // 将运行时配置注入到 Nuxt 的 public 运行时配置中
     nuxt.options.runtimeConfig = nuxt.options.runtimeConfig || { public: {} }
@@ -136,7 +136,7 @@ export default defineNuxtModule<ModuleOptions>({
 
     // 注册运行时插件
     addPlugin({
-      src: resolve('./runtime/plugin'),
+      src: resolve('./runtime/plugin/i18n-plugin'),
       mode: 'all',
     })
 
