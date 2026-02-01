@@ -1,3 +1,4 @@
+import i18nMessages from './i18n.config'
 export default defineNuxtConfig({
   modules: ['nuxt-i18n-within-code'],
   devtools: { enabled: true },
@@ -7,22 +8,6 @@ export default defineNuxtConfig({
     locales: ['zh',
       'en','ja',
     ],
-    // strategy: 'prefix',
-    detectBrowserLanguage: {
-      useCookie: false,
-      cookieKey: 'i18n_redirected',
-      redirectOn: 'root',
-    },
-    messages:{
-      "en":{
-        "hello":"hello"
-      },
-      "zh":{
-        "hello":"你好"
-      },
-      "ja":{
-        "hello":"co ni ji wa"
-      },
-    }
+    messages: i18nMessages
   }
 })

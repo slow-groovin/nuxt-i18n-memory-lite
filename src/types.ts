@@ -81,17 +81,17 @@ export interface ModuleOptions {
    * URL 路由前缀策略
    * @default 'prefix'
    */
-  strategy?: 'prefix' | 'prefix_except_default' | 'no_prefix'
+  // strategy?: 'prefix' | 'prefix_except_default' | 'no_prefix'
 
   /**
    * 浏览器语言检测配置
    */
-  detectBrowserLanguage?: DetectBrowserLanguageOptions
+  // detectBrowserLanguage?: DetectBrowserLanguageOptions
 
-  /**
-   * 外部配置文件路径（相对于项目根目录）
-   */
-  configFile?: string
+  // /**
+  //  * 外部配置文件路径（相对于项目根目录）
+  //  */
+  // configFile?: string
 }
 
 /**

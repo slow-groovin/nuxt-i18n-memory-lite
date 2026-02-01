@@ -6,7 +6,7 @@
       {{ locale }} {{ availableLocales }} 
       <br/>{{ localePath('/1') }} 
       <br/>
-      {{ t('hello') }} 
+      {{ t('hello') }} {{ t("home.header.notify") }}
     </div>
     <button @click="setLocale('ja')">ja</button>
     <button @click="setLocale('zh')">zh</button>
