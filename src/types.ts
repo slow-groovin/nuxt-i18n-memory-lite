@@ -1,3 +1,10 @@
+export interface LocaleObject {
+  code: string
+  name: string
+}
+
+export type Locale = string | LocaleObject
+
 // ============================================
 // 1. 浏览器语言检测配置类型
 // ============================================
@@ -9,7 +16,7 @@
 export interface DetectBrowserLanguageOptions {
   /**
    * 是否使用 cookie 存储语言偏好
-   * 设置为 true 时，会记住用户手动选择的语言，下次访问时优先使用
+   * 设置为 true 时时，会记住用户手动选择的语言，下次访问时优先使用
    * @default false
    */
   useCookie?: boolean
@@ -29,7 +36,7 @@ export interface DetectBrowserLanguageOptions {
    *   适用于大部分场景，用户在首页时自动跳转到合适的语言版本
    *
    * - 'all': 访问所有路径时都进行重定向
-   *   适用于需要强制使用检测到的语言的场景
+   *     适用于需要强制使用检测到的语言的场景
    *
    * - 'no_redirect': 不进行自动重定向
    *   完全由用户手动选择语言
@@ -70,7 +77,7 @@ export interface ModuleOptions {
    * all locales
    * @default ['en']
    */
-  locales?: string[]
+  locales?: Locale[]
 
   /**
    * messages

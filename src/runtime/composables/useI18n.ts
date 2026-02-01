@@ -24,18 +24,18 @@ export interface UseI18nReturn {
   /** 获取切换语言的路径 */
   switchLocalePath: (targetLocale: string) => string
   /** 可用语言列表 */
-  availableLocales: string[]
+  availableLocales: {code:string, name:string}[]
 }
 
 /**
  * 获取翻译消息
- * @param locale - 语言代码
+ * @param localeCode - 语言代码
  * @param messages - 所有翻译消息
  * @returns 指定语言的翻译消息
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function getMessages(locale: string, messages: Record<string, any>): Record<string, any> {
-  return messages[locale] || messages['en'] || {}
+function getMessages(localeCode: string, messages: Record<string, any>): Record<string, any> {
+  return messages[localeCode] || messages['en'] || {}
 }
 
 /**
@@ -63,13 +63,14 @@ function getMessages(locale: string, messages: Record<string, any>): Record<stri
  * ```
  */
 export function useI18n(): UseI18nReturn {
+  //locale 还是 code string
   const locale = useI18nLocale()
   const config = useRuntimeConfig().public.i18n
   const route = useRoute()
   const router = useRouter()
 
   // 可用语言列表
-  const availableLocales = computed(() => config.locales || ['en'])
+  const availableLocales = computed(() => config.locales as {code:string, name:string}[])
 
   /**
    * 翻译函数
@@ -90,17 +91,17 @@ export function useI18n(): UseI18nReturn {
 
   /**
    * 设置语言并跳转到对应路径
-   * @param newLocale - 目标语言代码
+   * @param newLocaleCode - 目标语言代码
    */
-  async function setLocale(newLocale: string): Promise<void> {
-    const locales = config.locales || ['en']
-    if (!locales.includes(newLocale)) {
-      console.warn(`[useI18n] Locale "${newLocale}" is not in available locales:`, locales)
+  async function setLocale(newLocaleCode: string): Promise<void> {
+    const locales = availableLocales.value
+    if (!locales.find(l=>l.code===newLocaleCode)) {
+      console.warn(`[useI18n] Locale "${newLocaleCode}" is not in available locales:`, locales)
       return
     }
 
-    locale.value = newLocale
-    const newPath = switchLocalePath(newLocale)
+    locale.value = newLocaleCode
+    const newPath = switchLocalePath(newLocaleCode)
     if (newPath && newPath !== route.fullPath) {
       await router.push(newPath)
     }
@@ -119,23 +120,23 @@ export function useI18n(): UseI18nReturn {
 
   /**
    * 获取切换语言的路径
-   * @param targetLocale - 目标语言代码
+   * @param targetLocaleCode - 目标语言代码
    * @returns 切换到目标语言的路径
    */
-  function switchLocalePath(targetLocale: string): string {
+  function switchLocalePath(targetLocaleCode: string): string {
     const currentPath = route.path
-    const locales = config.locales || ['en']
+    const locales = availableLocales.value
 
     // 去掉当前 locale prefix
     let stripped = currentPath
     for (const loc of locales) {
-      if (stripped.startsWith(`/${loc}`)) {
-        stripped = stripped.slice(`/${loc}`.length) || '/'
+      if (stripped.startsWith(`/${loc.code}`)) {
+        stripped = stripped.slice(`/${loc.code}`.length) || '/'
         break
       }
     }
 
-    return `/${targetLocale}${stripped.startsWith('/') ? stripped : '/' + stripped}`
+    return `/${targetLocaleCode}${stripped.startsWith('/') ? stripped : '/' + stripped}`
   }
 
   return {

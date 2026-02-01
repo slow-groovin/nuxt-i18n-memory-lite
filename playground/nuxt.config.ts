@@ -6,8 +6,11 @@ export default defineNuxtConfig({
   compatibilityDate: 'latest',
   i18nMemoryLite: {
     defaultLocale: 'zh',
-    locales: ['zh',
-      'en', 'ja',
+    locales: [
+      { code: 'en', name: 'English' },
+      { code: 'zh', name: '中文简体' },
+      { code: 'zh-TW', name: '中文繁体' },
+      { code: 'ja', name: '日本語' },
     ],
     messages: i18nMessages,
     debug: true,

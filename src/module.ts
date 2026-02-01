@@ -1,9 +1,18 @@
 import { addImportsDir, addPlugin, createResolver, defineNuxtModule } from '@nuxt/kit'
 import { defu } from 'defu'
 import type { NuxtPage } from 'nuxt/schema'
-import type { I18nRuntimeConfig, ModuleOptions } from './types'
+import type { I18nRuntimeConfig, Locale, ModuleOptions } from './types'
 
 export type { MessagesByLocale } from './types'
+
+function getLocaleCode(locale: Locale): string {
+  return typeof locale === 'string' ? locale : locale.code
+}
+
+function getLocaleCodes(locales?: Locale[]): string[] {
+  if (!locales) return []
+  return locales.map(getLocaleCode)
+}
 
 /**
  * Nuxt I18n Code 模块主定义
@@ -72,18 +81,20 @@ export default defineNuxtModule<ModuleOptions>({
     const mergedMessages: Record<string, any> = {}
     const resolvedMessages = typeof messages === 'function' ? messages() : messages
     const locales = _options.locales || []
+    const localeCodes = getLocaleCodes(locales)
 
     // Output locale configuration info
-    logDebug(`Configured locales array: [${locales.join(', ')}]`)
+    logDebug(`Configured locales array: [${localeCodes.join(', ')}]`)
     logDebug(`Default locale: ${_options.defaultLocale || 'en'}`)
 
     // Count message numbers
     let totalMessageCount = 0
     for (const locale of locales) {
-      mergedMessages[locale] = defu({}, resolvedMessages[locale] || {})
-      const localeMessageCount = Object.keys(mergedMessages[locale]).length
+      const localeCode = getLocaleCode(locale)
+      mergedMessages[localeCode] = defu({}, resolvedMessages[localeCode] || {})
+      const localeMessageCount = Object.keys(mergedMessages[localeCode]).length
       totalMessageCount += localeMessageCount
-      logDebug(`  - ${locale}: ${localeMessageCount} top-level messages`)
+      logDebug(`  - ${localeCode}: ${localeMessageCount} top-level messages`)
     }
     logDebug(`Total ${totalMessageCount} top-level translation messages loaded`)
 
@@ -106,18 +117,19 @@ export default defineNuxtModule<ModuleOptions>({
       logDebug('========== Route Extension Start ==========')
       const prefixedPages: NuxtPage[] = []
       const locales = _options.locales || []
+      const localeCodes = getLocaleCodes(locales)
 
       let totalGeneratedRoutes = 0
 
       for (const page of pages) {
         logDebug(`Processing original route: ${page.path} (name: ${page.name || 'unnamed'})`)
-        for (const locale of locales) {
-          const newPath = page.path === '/' ? `/${locale}` : `/${locale}${page.path}`
+        for (const localeCode of localeCodes) {
+          const newPath = page.path === '/' ? `/${localeCode}` : `/${localeCode}${page.path}`
 
           prefixedPages.push({
             ...page,
             path: newPath,
-            name: page.name ? `${locale}___${page.name}` : undefined,
+            name: page.name ? `${localeCode}___${page.name}` : undefined,
           })
           totalGeneratedRoutes++
         }

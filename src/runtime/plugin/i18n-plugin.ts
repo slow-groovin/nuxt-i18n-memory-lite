@@ -1,6 +1,6 @@
 import { defineNuxtPlugin, navigateTo, useRouter, useRuntimeConfig } from '#app'
 import { useRequestHeader } from '#imports'
-import type { I18nRuntimeConfig } from '~/src/types'
+import type { I18nRuntimeConfig, Locale } from '../../types'
 import { useI18nLocale } from '../state'
 import { detectLocale, parseLocaleFromPath } from '../utils/locale'
 
@@ -43,7 +43,8 @@ export default defineNuxtPlugin({
       const path = router.currentRoute.value.path
 
       logDebug(`Current path: ${path}`)
-      logDebug(`Available locales: [${i18nConfig.locales?.join(', ')}]`)
+      const localeCodes = i18nConfig.locales?.map((l: Locale) => typeof l === 'string' ? l : l.code).join(', ')
+      logDebug(`Available locales: [${localeCodes}]`)
       logDebug(`Default locale: ${i18nConfig.defaultLocale || 'en'}`)
 
       // Parse locale from current path
