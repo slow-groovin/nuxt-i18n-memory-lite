@@ -61,19 +61,19 @@ export type MessagesByLocale = Record<string, I18nMessages>
  */
 export interface ModuleOptions {
   /**
-   * 默认语言代码
+   * default locale
    * @default 'en'
    */
   defaultLocale?: string
 
   /**
-   * 支持的语言列表
+   * all locales
    * @default ['en']
    */
   locales?: string[]
 
   /**
-   * 翻译消息对象，可以直接内联定义或通过函数返回
+   * messages
    */
   messages?: MessagesByLocale | (() => MessagesByLocale)
 
@@ -84,14 +84,15 @@ export interface ModuleOptions {
   // strategy?: 'prefix' | 'prefix_except_default' | 'no_prefix'
 
   /**
-   * 浏览器语言检测配置
+   * 外部配置文件路径（相对于项目根目录）
    */
-  // detectBrowserLanguage?: DetectBrowserLanguageOptions
-
-  // /**
-  //  * 外部配置文件路径（相对于项目根目录）
-  //  */
   // configFile?: string
+
+  /**
+   * enable debug log
+   * @default false
+   */
+  debug?: boolean
 }
 
 /**

@@ -1,6 +1,6 @@
 {
   "name": "nuxt-i18n-memory-lite",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Lite nuxt i18n module, with messages defined in code, loaded in memory.",
   "repository": {
     "url": "git+https://github.com/slow-groovin/nuxt-i18n-memory-lite.git"

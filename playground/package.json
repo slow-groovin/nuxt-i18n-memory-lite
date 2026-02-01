@@ -7,7 +7,9 @@
     "build": "nuxt build",
     "generate": "nuxt generate"
   },
+  
   "dependencies": {
+    "my-module":"latest",
     "nuxt": "^4.3.0"
   }
 }

@@ -9,7 +9,10 @@ import type { I18nRuntimeConfig } from '../../types'
  * @returns 解析出的语言代码或 null
  */
 export function parseLocaleFromPath(path: string, locales?: string[]): string | null {
-  const supportedLocales = locales || ['en', 'zh']
+  if (!locales || locales.length === 0) {
+    return null
+  }
+  const supportedLocales = locales
 
   for (const loc of supportedLocales) {
     if (path === `/${loc}` || path.startsWith(`/${loc}/`)) {

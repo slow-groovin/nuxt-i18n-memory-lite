@@ -4,7 +4,7 @@
 
     <div>
       {{ locale }} {{ availableLocales }}
-      <br>{{ localePath('/1') }}
+      <br>{{ localePath('/indexpage') }}
       <br>
       {{ t('hello') }} {{ t("home.header.notify") }}
     </div>
