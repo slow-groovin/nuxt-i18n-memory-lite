@@ -1,7 +1,8 @@
-import { defineNuxtModule, addPlugin, createResolver, addImportsDir, addTemplate } from '@nuxt/kit'
+import { addImportsDir, addPlugin, createResolver, defineNuxtModule } from '@nuxt/kit'
 import { defu } from 'defu'
 import type { NuxtPage } from 'nuxt/schema'
-import type { I18nRuntimeConfig, ModuleOptions, MessagesByLocale } from './types'
+import type { I18nRuntimeConfig, ModuleOptions } from './types'
+
 export type { MessagesByLocale } from './types'
 
 /**
@@ -39,16 +40,15 @@ export default defineNuxtModule<ModuleOptions>({
     addImportsDir(resolve('./runtime/composables'))
 
     // 初始化翻译消息对象
-    let messages = _options.messages || {}
+    const messages = _options.messages || {}
 
     // 为每个语言创建合并后的翻译消息
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const mergedMessages: Record<string, any> = {}
     const resolvedMessages = typeof messages === 'function' ? messages() : messages
     for (const locale of _options.locales || []) {
       mergedMessages[locale] = defu({}, resolvedMessages[locale] || {})
     }
-
-    
 
     // 构建运行时配置对象
     const runtimeConfig: I18nRuntimeConfig = {
@@ -59,6 +59,7 @@ export default defineNuxtModule<ModuleOptions>({
     // 将运行时配置注入到 Nuxt 的 public 运行时配置中
     nuxt.options.runtimeConfig = nuxt.options.runtimeConfig || { public: {} }
     nuxt.options.runtimeConfig.public = nuxt.options.runtimeConfig.public || {}
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     nuxt.options.runtimeConfig.public.i18n = runtimeConfig as any
 
     // 扩展路由以支持多语言前缀

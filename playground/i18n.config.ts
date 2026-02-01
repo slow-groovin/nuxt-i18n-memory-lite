@@ -1,19 +1,18 @@
-
 export default {
   en: {
     hello: 'Hello',
-    home:{
-      header:{
+    home: {
+      header: {
         notify: 'NOTIFY2222',
       },
     },
-    welcome: 'Welcome to {appName}'
+    welcome: 'Welcome to {appName}',
   },
   zh: {
     hello: '你好',
     welcome: '欢迎来到 {appName}',
-    home:{
-      header:{
+    home: {
+      header: {
         notify: '通知',
       },
     },
@@ -21,10 +20,10 @@ export default {
   ja: {
     hello: 'こんにちは',
     welcome: '{appName}へようこそ',
-    home:{
-      header:{
+    home: {
+      header: {
         notify: '通知',
       },
     },
-  }
+  },
 }

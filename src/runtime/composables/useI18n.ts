@@ -33,29 +33,30 @@ export interface UseI18nReturn {
  * @param messages - 所有翻译消息
  * @returns 指定语言的翻译消息
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function getMessages(locale: string, messages: Record<string, any>): Record<string, any> {
   return messages[locale] || messages['en'] || {}
 }
 
 /**
  * 使用 i18n
- * 
+ *
  * 提供完整的国际化功能，包括翻译、语言切换、路径生成等
- * 
+ *
  * @returns {UseI18nReturn} i18n 功能对象
- * 
+ *
  * @example
  * ```vue
  * <script setup>
  * const { t, locale, setLocale, localePath } = useI18n()
- * 
+ *
  * // 翻译
  * console.log(t('hello')) // 'Hello'
  * console.log(t('welcome', { name: 'World' })) // 'Welcome World'
- * 
+ *
  * // 切换语言
  * await setLocale('zh')
- * 
+ *
  * // 生成本地化路径
  * const path = localePath('/about') // '/en/about'
  * </script>
@@ -63,7 +64,7 @@ function getMessages(locale: string, messages: Record<string, any>): Record<stri
  */
 export function useI18n(): UseI18nReturn {
   const locale = useI18nLocale()
-  const config=useRuntimeConfig().public.i18n;
+  const config = useRuntimeConfig().public.i18n
   const route = useRoute()
   const router = useRouter()
 
@@ -78,6 +79,7 @@ export function useI18n(): UseI18nReturn {
    */
   function t(key: string, params?: Record<string, string>): string {
     const msgs = getMessages(locale.value, config.messages || {})
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const val = key.split('.').reduce<unknown>((acc, k) => (acc as any)?.[k], msgs)
     let msg = typeof val === 'string' ? val : key
     if (params) {
@@ -123,7 +125,7 @@ export function useI18n(): UseI18nReturn {
   function switchLocalePath(targetLocale: string): string {
     const currentPath = route.path
     const locales = config.locales || ['en']
-    
+
     // 去掉当前 locale prefix
     let stripped = currentPath
     for (const loc of locales) {
@@ -132,7 +134,7 @@ export function useI18n(): UseI18nReturn {
         break
       }
     }
-    
+
     return `/${targetLocale}${stripped.startsWith('/') ? stripped : '/' + stripped}`
   }
 

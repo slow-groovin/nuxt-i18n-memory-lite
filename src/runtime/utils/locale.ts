@@ -10,7 +10,7 @@ import type { I18nRuntimeConfig } from '../../types'
  */
 export function parseLocaleFromPath(path: string, locales?: string[]): string | null {
   const supportedLocales = locales || ['en', 'zh']
-  
+
   for (const loc of supportedLocales) {
     if (path === `/${loc}` || path.startsWith(`/${loc}/`)) {
       return loc
@@ -28,9 +28,9 @@ export function parseLocaleFromPath(path: string, locales?: string[]): string | 
 export function detectLocale(acceptLang: string | undefined, config: I18nRuntimeConfig): string {
   const locales = config.locales || ['en']
   const defaultLocale = config.defaultLocale || 'en'
-  
+
   if (!acceptLang) return defaultLocale
-  
+
   const lang = acceptLang.split(',')[0]?.split('-')[0]?.trim()
   return (lang && locales.includes(lang)) ? lang : defaultLocale
 }

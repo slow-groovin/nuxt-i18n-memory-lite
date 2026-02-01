@@ -1,4 +1,3 @@
-
 // ============================================
 // 1. 浏览器语言检测配置类型
 // ============================================
@@ -48,6 +47,7 @@ export interface DetectBrowserLanguageOptions {
  * 翻译消息类型
  * 支持嵌套对象结构，如 { home: { title: 'Welcome' } }
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type I18nMessages = Record<string, string | Record<string, any>>
 
 /**

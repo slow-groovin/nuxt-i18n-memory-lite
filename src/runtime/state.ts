@@ -12,7 +12,7 @@ export function useI18nLocale() {
     const runtimeConfig = useRuntimeConfig()
     const i18nConfig = runtimeConfig.public.i18n as I18nRuntimeConfig
     const defaultLocale = i18nConfig?.defaultLocale || 'en'
-    
+
     _locale = useState<string>('i18n_locale', () => defaultLocale)
   }
   return _locale
