@@ -24,7 +24,7 @@ export interface UseI18nReturn {
   /** 获取切换语言的路径 */
   switchLocalePath: (targetLocale: string) => string
   /** 可用语言列表 */
-  availableLocales: {code:string, name:string}[]
+  availableLocales: { code: string, name: string }[]
 }
 
 /**
@@ -63,14 +63,14 @@ function getMessages(localeCode: string, messages: Record<string, any>): Record<
  * ```
  */
 export function useI18n(): UseI18nReturn {
-  //locale 还是 code string
+  // locale 还是 code string
   const locale = useI18nLocale()
   const config = useRuntimeConfig().public.i18n
   const route = useRoute()
   const router = useRouter()
 
   // 可用语言列表
-  const availableLocales = computed(() => config.locales as {code:string, name:string}[])
+  const availableLocales = computed(() => config.locales as { code: string, name: string }[])
 
   /**
    * 翻译函数
@@ -95,7 +95,7 @@ export function useI18n(): UseI18nReturn {
    */
   async function setLocale(newLocaleCode: string): Promise<void> {
     const locales = availableLocales.value
-    if (!locales.find(l=>l.code===newLocaleCode)) {
+    if (!locales.find(l => l.code === newLocaleCode)) {
       console.warn(`[useI18n] Locale "${newLocaleCode}" is not in available locales:`, locales)
       return
     }

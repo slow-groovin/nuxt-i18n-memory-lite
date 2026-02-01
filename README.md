@@ -39,13 +39,33 @@ bun add nuxt-i18n-memory-lite
 
 Add the module to your `nuxt.config.ts`:
 
+The `locales` option supports both string arrays and object arrays with `code` and `name` properties:
+
 ```typescript
 import { defineNuxtConfig } from 'nuxt'
 import i18nMessages from './i18n.config'
 
 export default defineNuxtConfig({
   modules: ['nuxt-i18n-memory-lite'],
-  i18nMemory: {
+  i18nMemoryLite: {
+    defaultLocale: 'en',
+    locales: [
+      { code: 'en', name: 'English' },
+      { code: 'zh', name: '中文简体' },
+      { code: 'zh-TW', name: '中文繁体' },
+      { code: 'ja', name: '日本語' },
+    ],
+    messages: i18nMessages
+  }
+})
+```
+
+Or using simple strings:
+
+```typescript
+export default defineNuxtConfig({
+  modules: ['nuxt-i18n-memory-lite'],
+  i18nMemoryLite: {
     defaultLocale: 'en',
     locales: ['en', 'zh', 'ja'],
     messages: i18nMessages
@@ -65,6 +85,10 @@ export default {
   zh: {
     hello: '你好',
     welcome: '欢迎来到 {appName}'
+  },
+  'zh-TW': {
+    hello: '你好',
+    welcome: '歡迎來到 {appName}'
   },
   ja: {
     hello: 'こんにちは',
@@ -107,7 +131,7 @@ console.log(t('welcome', { appName: 'My App' }))
 console.log(locale.value)
 
 // Get available locales
-console.log(availableLocales.value)
+console.log(availableLocales.value) // Returns: [{ code: 'en', name: 'English' }, ...]
 
 // Get localized path
 console.log(localePath('/about')) // Returns /en/about (or current locale)
