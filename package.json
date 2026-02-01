@@ -1,8 +1,8 @@
 {
   "name": "nuxt-i18n-memory-lite",
-  "version": "1.0.0",
-  "description": "My new Nuxt module",
-  "repository": "your-org/my-module",
+  "version": "0.1",
+  "description": "Lite nuxt i18n module, with messages defined in code, loaded in memory.",
+  "repository": "slow-groovin/nuxt-i18n-memory-lite",
   "license": "MIT",
   "type": "module",
   "exports": {
