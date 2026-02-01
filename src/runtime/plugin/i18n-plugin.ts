@@ -5,7 +5,7 @@ import type { I18nRuntimeConfig } from '~/src/types'
 import { useI18nLocale } from "../state"
 import { detectLocale, parseLocaleFromPath } from '../utils/locale'
 
-const DEBUG = true
+const DEBUG = false
 const log = (...args: any[]) => DEBUG && console.log('[i18n]', ...args)
 
 export default defineNuxtPlugin({

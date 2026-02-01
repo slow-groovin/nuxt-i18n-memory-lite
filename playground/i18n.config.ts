@@ -19,11 +19,11 @@ export default {
     },
   },
   ja: {
-    hello: 'conijiwa',
-    welcome: '欢迎来到 {appName}',
+    hello: 'こんにちは',
+    welcome: '{appName}へようこそ',
     home:{
       header:{
-        notify: 'NO TI FI EY',
+        notify: '通知',
       },
     },
   }

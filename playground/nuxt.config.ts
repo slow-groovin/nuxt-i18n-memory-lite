@@ -1,9 +1,9 @@
 import i18nMessages from './i18n.config'
 export default defineNuxtConfig({
-  modules: ['nuxt-i18n-within-code'],
+  modules: ['nuxt-i18n-memory-lite'],
   devtools: { enabled: true },
   compatibilityDate: 'latest',
-  i18nWithinCode:{
+  i18nMemory:{
     defaultLocale: 'zh',
     locales: ['zh',
       'en','ja',

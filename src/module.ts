@@ -9,8 +9,8 @@ export type { MessagesByLocale } from './types'
  */
 export default defineNuxtModule<ModuleOptions>({
   meta: {
-    name: 'nuxt-i18n-within-code',
-    configKey: 'i18nWithinCode',
+    name: 'nuxt-i18n-memory-lite',
+    configKey: 'i18nMemory',
     compatibility: {
       nuxt: '>=3.0.0',
     },

@@ -1,84 +1,134 @@
-<!--
-Get your module up and running quickly.
+# nuxt-i18n-memory-lite
 
-Find and replace all on all files (CMD+SHIFT+F):
-- Name: My Module
-- Package name: my-module
-- Description: My new Nuxt module
--->
+A lightweight Nuxt module for i18n internationalization.
 
-# My Module
+## ⚠️ Important Limitations
 
-[![npm version][npm-version-src]][npm-version-href]
-[![npm downloads][npm-downloads-src]][npm-downloads-href]
-[![License][license-src]][license-href]
-[![Nuxt][nuxt-src]][nuxt-href]
+> **This module was created using vibe coding and has significant limitations:**
 
-My new Nuxt module for doing amazing things.
+- **Hard-coded configuration**: Many features are hard-coded and not configurable
+- **Only supports prefix-based routing**: URLs must include the language prefix (e.g., `/en/about`, `/ja/about`)
+- **Header-based language detection**: When no language prefix is present in the URL, the module attempts to detect the language from HTTP headers
+- **Configuration requires restart**: Messages defined in `nuxt.config.ts` can import from other files, but any changes require a full server restart to take effect
 
-- [✨ &nbsp;Release Notes](/CHANGELOG.md)
-<!-- - [🏀 Online playground](https://stackblitz.com/github/your-org/my-module?file=playground%2Fapp.vue) -->
-<!-- - [📖 &nbsp;Documentation](https://example.com) -->
+## ✨ Advantages
 
-## Features
+Despite the limitations, this module offers some unique benefits:
 
-<!-- Highlight some of the features your module provide here -->
-- ⛰ &nbsp;Foo
-- 🚠 &nbsp;Bar
-- 🌲 &nbsp;Baz
+- **Perfect for small i18n needs**: Ideal for projects with a small amount of internationalization text
+- **No file I/O operations**: Since all messages are stored in memory and configured directly in `nuxt.config.ts`, there are no file system reads for i18n files
+- **Serverless-friendly**: The lack of file I/O makes this module perfect for serverless environments (AWS Lambda, Vercel, Netlify Functions, etc.) where file system access is limited or non-existent
 
-## Quick Setup
-
-Install the module to your Nuxt application with one command:
+## 📦 Installation
 
 ```bash
-npx nuxt module add my-module
+# npm
+npm install nuxt-i18n-memory-lite
+
+# yarn
+yarn add nuxt-i18n-memory-lite
+
+# pnpm
+pnpm add nuxt-i18n-memory-lite
+
+# bun
+bun add nuxt-i18n-memory-lite
 ```
 
-That's it! You can now use My Module in your Nuxt app ✨
+## 🔧 Configuration
 
+Add the module to your `nuxt.config.ts`:
 
-## Contribution
+```typescript
+import { defineNuxtConfig } from 'nuxt'
+import i18nMessages from './i18n.config'
 
-<details>
-  <summary>Local development</summary>
-  
-  ```bash
-  # Install dependencies
-  npm install
-  
-  # Generate type stubs
-  npm run dev:prepare
-  
-  # Develop with the playground
-  npm run dev
-  
-  # Build the playground
-  npm run dev:build
-  
-  # Run ESLint
-  npm run lint
-  
-  # Run Vitest
-  npm run test
-  npm run test:watch
-  
-  # Release new version
-  npm run release
-  ```
+export default defineNuxtConfig({
+  modules: ['nuxt-i18n-memory-lite'],
+  i18nMemory: {
+    defaultLocale: 'en',
+    locales: ['en', 'zh', 'ja'],
+    messages: i18nMessages
+  }
+})
+```
 
-</details>
+Create an `i18n.config.ts` file to define your messages.  
+You can place it anywhere, as long as you import it in `nuxt.config.ts`.
 
+```typescript
+export default {
+  en: {
+    hello: 'Hello',
+    welcome: 'Welcome to {appName}'
+  },
+  zh: {
+    hello: '你好',
+    welcome: '欢迎来到 {appName}'
+  },
+  ja: {
+    hello: 'こんにちは',
+    welcome: '{appName}へようこそ'
+  }
+}
+```
 
-<!-- Badges -->
-[npm-version-src]: https://img.shields.io/npm/v/my-module/latest.svg?style=flat&colorA=020420&colorB=00DC82
-[npm-version-href]: https://npmjs.com/package/my-module
+## 📝 Usage
 
-[npm-downloads-src]: https://img.shields.io/npm/dm/my-module.svg?style=flat&colorA=020420&colorB=00DC82
-[npm-downloads-href]: https://npm.chart.dev/my-module
+### In Vue Templates
 
-[license-src]: https://img.shields.io/npm/l/my-module.svg?style=flat&colorA=020420&colorB=00DC82
-[license-href]: https://npmjs.com/package/my-module
+```vue
+<template>
+  <div>
+    <h1>{{ $t('hello') }}</h1>
+    <p>{{ $t('welcome', { appName: 'My App' }) }}</p>
+  </div>
+</template>
+```
 
-[nuxt-src]: https://img.shields.io/badge/Nuxt-020420?logo=nuxt
-[nuxt-href]: https://nuxt.com
+### In Composables/Setup
+
+```vue
+<script setup>
+const { 
+  t, 
+  locale, 
+  setLocale,
+  availableLocales,
+  localePath,
+  switchLocalePath 
+} = useI18n()
+
+// Translate
+console.log(t('hello'))
+console.log(t('welcome', { appName: 'My App' }))
+
+// Get current locale
+console.log(locale.value)
+
+// Get available locales
+console.log(availableLocales.value)
+
+// Get localized path
+console.log(localePath('/about')) // Returns /en/about (or current locale)
+
+// Get path to switch locale
+console.log(switchLocalePath('ja')) // Returns /ja/current-path
+
+// Change locale
+setLocale('ja')
+</script>
+```
+
+### Switching Locales
+
+The module provides automatic locale switching based on URL prefix:
+- `/en/about` - English version
+- `/ja/about` - Japanese version
+- `/zh/about` - Chinese version
+
+If no locale prefix is present, the module will attempt to detect the language from HTTP headers.
+
+## 📄 License
+
+[MIT License](./LICENSE)
